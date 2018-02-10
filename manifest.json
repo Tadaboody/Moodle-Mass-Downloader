@@ -1,20 +1,21 @@
 {
-    "manifest_version":2,
-    "name":"Moodle Downloader Extention",
-    "description":"This Extention will download all of a moodle courses files",
-    "version":"0.1",
-    "browser_action":{
+    "manifest_version": 2,
+    "name": "Moodle Downloader Extention",
+    "description": "This Extention will download all of a moodle courses files",
+    "version": "0.1",
+    "browser_action": {
         "default_icon": "icon.png",
-        "default_popup":"popup.html"
+        "default_popup": "popup.html"
     },
-    "content_scripts":
-    [
-        {
+    "content_scripts": [{
         "matches": ["https://mw5.haifa.ac.il/course/*"],
-        "js":["content.js"],
-        "run_ar":"document_end"
-        }
-    ],
+        "js": ["content.js"],
+        "run_ar": "document_end"
+    }],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
     "permissions": [
         "activeTab",
         "downloads"
