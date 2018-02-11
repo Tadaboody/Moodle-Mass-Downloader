@@ -35,7 +35,7 @@ function download_section_factory(section,section_name)
         Array.from(links).forEach(
             (link,index,link_array) =>
             {
-                download_file(link.href)
+                download_file(link.href, section_name)
             }
         )
         return false;
@@ -43,9 +43,9 @@ function download_section_factory(section,section_name)
     return download_section;
 }
 
-function download_file(url,filename)
+function download_file(url,section_name)
 {
-    chrome.runtime.sendMessage({ type: "download", url: url }, function (response) { console.log("BYE!") });
+    chrome.runtime.sendMessage({ type: "download", url: url, section_name: section_name }, function (response) { console.log("BYE!") });
 }
 
 function create_dl_button(section,section_name)
