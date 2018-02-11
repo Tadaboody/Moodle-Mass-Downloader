@@ -20,5 +20,5 @@ function suggest_file_name(download_item, suggest) {
 }
 
 function pathJoin(...args) {
-    return args.reduce((a, b) => a + '\\' + b, 0);//TODO: linux support (\\\\ makes "file path too long")
+    return args.reduce((a, b) => a + '\\' + b);//TODO: linux support (\\\\ makes "file path too long")
 }

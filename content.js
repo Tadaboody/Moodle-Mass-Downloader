@@ -17,7 +17,7 @@ function getCourseName()
     var nav_links = document.getElementsByClassName("breadcrumb-item");
     var course_link = nav_links[nav_links.length - 1];
     let full_course_name =  course_link.getElementsByTagName("a")[0].title;//includes course number
-    return /(\D+)/g.exec(full_course_name)[0].trim();//TODO: add option to keep the course number
+    return /(\D+)/g.exec(full_course_name)[1].trim();//TODO: add option to keep the course number
 }
 
 function validLink(link)
@@ -35,7 +35,17 @@ function download_section_factory(section,section_name)
         Array.from(links).forEach(
             (link,index,link_array) =>
             {
-                download_file(link.href, section_name)
+                var redirect_link = link.attributes.onclick.textContent;
+                console.log(redirect_link);
+                match = /window.open\('(.+)'/g.exec(redirect_link);
+                console.log(match);
+                if(match)
+                {
+                    download_file(match[1], section_name)
+                }else
+                {
+                    download_file(link.href, section_name);
+                }
             }
         )
         return false;
@@ -45,7 +55,7 @@ function download_section_factory(section,section_name)
 
 function download_file(url,section_name)
 {
-    chrome.runtime.sendMessage({ type: "download", url: url, section_name: section_name }, function (response) { console.log("BYE!") });
+    chrome.runtime.sendMessage({ type: "download", url: url, section_name: section_name }, function (response) { console.log("downloaded:" + url)});
 }
 
 function create_dl_button(section,section_name)
