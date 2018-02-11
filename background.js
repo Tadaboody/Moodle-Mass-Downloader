@@ -2,6 +2,7 @@ var course_name = "";
 var link_section_name = {};
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
+        chrome.pageAction.show(sender.tab.id);
         if (request.type === "download") {
             link_section_name[request.url] = request.section_name;
             chrome.downloads.download({ url: request.url },
