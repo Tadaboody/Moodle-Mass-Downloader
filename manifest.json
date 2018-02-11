@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Mass Moodle Downloader",
+    "name": "Moodle Mass Downloader",
     "description": "Mass Download a moodle courses files",
     "version": "0.1",
     "icons": {

@@ -51,9 +51,9 @@ function download_file(url, section_name) {
 
 function create_dl_button(section, section_name) {
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
-    const button_text = "הורד את כל הפרק";
+    const button_text = "הורד את כל קבצי הפרק";
     const button_function = download_section_factory(section, section_name);
-    const desc_text = "Mass Moodle Downloader";
+    const desc_text = "Moodle Mass Downloader";
 
     var download_button = section.firstChild.cloneNode(true);
     download_button.setAttribute("id", "");

@@ -26,7 +26,7 @@ If you happen to use a version that doesn't seem to be supported or have any bug
 
 * **Tomer Keren** - [email](tomerpet@gmail.com), [github](https://www.github.com/Tadaboody)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Tadaboody/Moodle-Mass-Downloader/contributors) who participated in this project.
 
 ## License
 

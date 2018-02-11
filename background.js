@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(
         if (request.type === "download") {
             link_section_name[request.url] = request.section_name;
             chrome.downloads.download({ url: request.url },
-                function (id) { sendResponse("Done!") });
+                function (id) { sendResponse("Done!"); });
             return true;
         }
         if (request.type === "course_name") {
