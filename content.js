@@ -65,9 +65,11 @@ function create_dl_button(section,section_name)
 
     var icon = download_button.getElementsByTagName("img")[0];
     icon.src = button_icon; //todo: custom icon
-
     var text = download_button.getElementsByClassName("instancename")[0];
     text.textContent = button_text;
 
+    var desc = download_button.getElementsByClassName("resourcelinkdetails")[0];
+    desc.textContent = "Mass Moodle Downloader"
+    
     return download_button;
 }
