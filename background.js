@@ -11,6 +11,7 @@ chrome.runtime.onMessage.addListener(
         }
         if (request.type === "course_name") {
             course_name = request.course_name;
+            sendResponse();
         }
     });
 
