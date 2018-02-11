@@ -1,17 +1,25 @@
-chrome.runtime.sendMessage({ type: "course_name", course_name: getCourseName() });
-Array.from(document.getElementsByClassName("section img-text")).forEach(
-    (ul, index, ulArray) => {
-        var section_name = "";
-        if (index === 0) {//first section is intro/sylabus
-            section_name = "פתיחה";
+chrome.runtime.sendMessage({ type: "course_name", course_name: getCourseName() },create_buttons);
+
+function create_buttons()
+{
+    Array.from(document.getElementsByClassName("section img-text")).forEach(
+        (ul, index, ulArray) => {
+            try {
+                var section_name = "";
+                if (index === 0) {//first section is intro/sylabus
+                    section_name = "פתיחה";
+                }
+                else {
+                    section_name = document.getElementsByClassName("sectionname")[index - 1].textContent;
+                }
+                var download_button = create_dl_button(ul, section_name);
+                ul.insertBefore(download_button, ul.firstChild);
+            } catch (error) {
+                console.error(error);
+            }
         }
-        else {
-            section_name = document.getElementsByClassName("sectionname")[index - 1].textContent;
-        }
-        var download_button = create_dl_button(ul, section_name);
-        ul.insertBefore(download_button, ul.firstChild);
-    }
-);
+    );
+}
 
 function getCourseName() {
     let full_course_name = document.getElementsByTagName("h1")[0].textContent;//includes course number
