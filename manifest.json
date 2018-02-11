@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Moodle Downloader Extention",
+    "name": "Mass Moodle Downloader",
     "description": "This Extention will download all of a moodle courses files",
     "version": "0.1",
     "browser_action": {
