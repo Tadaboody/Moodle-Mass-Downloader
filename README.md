@@ -13,10 +13,8 @@ Go into `chrome://extentions` and turn Developer Mode on.
 Click `Load unpacked extention...` and select the project folder  
 While debugging remember to go back to the extention page and reload the extention!
 
+## Use
 
-## Deployment
-
-Deployment will be done by me to the chrome store check out the [current app!](https://chrome.google.com/webstore/category/extensions?hl=en-US)
 
 
 ## Contributing
