@@ -54,13 +54,16 @@ function create_dl_button(section, section_name) {
     const button_text = "הורד את כל קבצי הפרק";
     const button_function = download_section_factory(section, section_name);
     const desc_text = "Moodle Mass Downloader";
+    
 
-    var download_button = section.firstChild.cloneNode(true);
-    download_button.setAttribute("id", "");
+    var download_button = document.createElement("li");
+    download_button.setAttribute("class", "activity resource modtype_resource ");
+    const button_html = '<div><div class="mod-indent-outer"><div class="mod-indent"></div><div><div class="activityinstance"><a class="" onclick="" href="https://mw5.haifa.ac.il/mod/resource/view.php?id=11679"><img src="https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/pdf-24" class="iconlarge activityicon" alt=" " role="presentation"><span class="instancename">הרצאה 1 - מבוא<span class="accesshide "> קובץ</span></span></a> <span class="resourcelinkdetails">מסמך PDF</span></div></div></div></div>';
+    download_button.innerHTML = button_html;
     var link = download_button.getElementsByTagName("a")[0];
     link.setAttribute("onclick", "");
     link.onclick = button_function;
-    // link.href = ""//Legal, makes page refresh on redirect
+    link.href = "";//Legal, makes page refresh on redirect
 
     var icon = download_button.getElementsByTagName("img")[0];
     icon.src = button_icon; //todo: custom icon
