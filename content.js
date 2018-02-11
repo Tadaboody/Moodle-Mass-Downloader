@@ -1,35 +1,62 @@
 Array.from(document.getElementsByClassName("section img-text")).forEach(
     (ul, index, ulArray) => {
-        var download_button = create_dl_button(ul);
+        if (index === 0) {//first section is intro/sylabus
+            var section_name = "פתיחה"
+        }
+        else
+        {
+            var section_name = document.getElementsByClassName("sectionname")[index - 1].textContent;
+        }
+        var download_button = create_dl_button(ul,section_name);
         ul.insertBefore(download_button, ul.firstChild);
     }
 )
+chrome.runtime.sendMessage({ type: "course_name", course_name: getCourseName() });
+function getCourseName()
+{
+    var nav_links = document.getElementsByClassName("breadcrumb-item");
+    var course_link = nav_links[nav_links.length - 1];
+    let full_course_name =  course_link.getElementsByTagName("a")[0].title;//includes course number
+    return /(\D+)/g.exec(full_course_name)[0].trim();//TODO: add option to keep the course number
+}
 
+function validLink(link)
+{
+    return link !== "" && link.contains("resource");
+}
 
-function download_section_factory(section)
+function download_section_factory(section,section_name)
 {
     function download_section(event)
     {
-        event.preventDefault(); // Make the <a> not redirect
-        download_file("https://mw5.haifa.ac.il/mod/resource/view.php?id=79655","Fold/srs.pdf")
-        // var links = section.getElementsByTagName("a");
-        // var names = section.getElementsByClassName("instancename");
-        // Array.from(links).forEach()
+        event.preventDefault(); // Makes the <a> not redirect
+        let links = Array.from(section.getElementsByTagName("a")).filter(link =>  link.href !== "" && link.href.includes("resource") );
+        // chrome.runtime.sendMessage(section_name)
+        Array.from(links).forEach(
+            (link,index,link_array) =>
+            {
+                download_file(link.href)
+            }
+        )
         return false;
     }
     return download_section;
 }
 
+function file_ext(image)
+{
+    known_ext = []
+}
 function download_file(url,filename)
 {
-    chrome.runtime.sendMessage({ url: url, filename: filename }, function (response) {console.log("BYE!") });
+    chrome.runtime.sendMessage({ type: "download", url: url }, function (response) { console.log("BYE!") });
 }
 
-function create_dl_button(section)
+function create_dl_button(section,section_name)
 {
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
     const button_text = "הורד הכל";
-    const button_function = download_section_factory(section);
+    const button_function = download_section_factory(section,section_name);
     //horrible javascript re-creating the html and styling of a moodle button
     var download_button = document.createElement("li");
     download_button.setAttribute("class","activity resource modtype_resource ")
