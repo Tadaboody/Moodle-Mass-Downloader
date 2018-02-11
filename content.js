@@ -55,7 +55,7 @@ function download_file(url,filename)
 function create_dl_button(section,section_name)
 {
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
-    const button_text = "הורד הכל";
+    const button_text = "הורד את כל הפרק";
     const button_function = download_section_factory(section,section_name);
     //horrible javascript re-creating the html and styling of a moodle button
     var download_button = document.createElement("li");
