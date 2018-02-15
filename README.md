@@ -14,7 +14,10 @@ Click `Load unpacked extention...` and select the project folder
 While debugging remember to go back to the extention page and reload the extention!
 
 ## Use
-
+Once you've installed the extention you should see this button on every section
+![Pic of the button](screenshots/Screenshot_1.png)
+Clicking it will download all of the section it's in into a nice folder
+![](screenshots/Screenshot_3.png)
 
 
 ## Contributing
