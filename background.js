@@ -8,7 +8,8 @@ chrome.runtime.onMessage.addListener(
             case "download":
                 register_dl_object(request);
                 chrome.downloads.download({
-                    url: request.url
+                    url: request.url,
+                    FilenameConflictAction: "overwrite"//TODO: add options
                 },
                     function (id) {
                         sendResponse("Done!");
