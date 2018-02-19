@@ -6,9 +6,10 @@ chrome.runtime.onMessage.addListener(
                 chrome.pageAction.show(sender.tab.id);
                 break;
             case "download":
-                link_records[request.url] = request;
+                register_dl_object(request);
                 chrome.downloads.download({
-                    url: request.url
+                    url: request.url,
+                    FilenameConflictAction: "overwrite"//TODO: add options
                 },
                     function (id) {
                         sendResponse("Done!");
@@ -16,6 +17,10 @@ chrome.runtime.onMessage.addListener(
                 return true;
         }
     });
+
+function register_dl_object(dl_object) {
+    link_records[dl_object.url] = dl_object;
+}
 
 chrome.downloads.onDeterminingFilename.addListener(suggest_file_name);
 
