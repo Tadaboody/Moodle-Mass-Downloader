@@ -27,6 +27,7 @@ chrome.downloads.onDeterminingFilename.addListener(suggest_file_name);
 function suggest_file_name(download_item, suggest) {
     link_record = link_records[download_item.url];
     download_item.filename = pathJoin("הורדות מודל", link_record.course_name, link_record.section_name, download_item.filename);
+    download_item.conflictAction = 'overwrite';
     console.log("suggested name=" + download_item.filename);
     suggest(download_item);
 }
