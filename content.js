@@ -32,23 +32,22 @@ function validLink(link) {
 function download_section_factory(section, section_name, course_name) {
     function download_section(event) {
         event.preventDefault(); // Makes the <a> not redirect
-        let links = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
-        Array.from(links).forEach(
-            (link, index) => {
-                var redirect_link = link.attributes.onclick.textContent;
+        let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
+        let possible_video_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("url"));
+        let download_record = { url: "", section_name: section_name, course_name };
+        Array.from(file_anchors).forEach(
+            anchor => {
+                var redirect_link = anchor.attributes.onclick.textContent;
                 var dl_link;
                 match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
                 console.log(match);
                 if (match) {
                     dl_link = match[1];
                 } else {
-                    dl_link = link.href;
+                    dl_link = anchor.href;
                 }
-                download_file({
-                    url: dl_link,
-                    section_name: section_name,
-                    course_name: course_name
-                });
+                download_record.url = dl_link;
+                download_file(download_record);
             }
         );
         return false;
