@@ -1,9 +1,8 @@
-chrome.runtime.sendMessage({ type: "course_name", course_name: getCourseName() },create_buttons);
+chrome.runtime.sendMessage({ type: "startup" }, create_buttons);
 
-function create_buttons()
-{
+function create_buttons() {
     Array.from(document.getElementsByClassName("section img-text")).forEach(
-        (ul, index, ulArray) => {
+        (ul, index) => {
             try {
                 var section_name = "";
                 if (index === 0) {//first section is intro/sylabus
@@ -12,7 +11,7 @@ function create_buttons()
                 else {
                     section_name = document.getElementsByClassName("sectionname")[index - 1].textContent;
                 }
-                var download_button = create_dl_button(ul, section_name);
+                var download_button = create_dl_button(ul, section_name, getCourseName());
                 ul.insertBefore(download_button, ul.firstChild);
             } catch (error) {
                 console.error(error);
@@ -30,22 +29,26 @@ function validLink(link) {
     return link !== "" && link.contains("resource");
 }
 
-function download_section_factory(section, section_name) {
+function download_section_factory(section, section_name, course_name) {
     function download_section(event) {
         event.preventDefault(); // Makes the <a> not redirect
         let links = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
-        // chrome.runtime.sendMessage(section_name)
         Array.from(links).forEach(
-            (link, index, link_array) => {
+            (link, index) => {
                 var redirect_link = link.attributes.onclick.textContent;
-                console.log(redirect_link);
-                match = /window.open\('(.+)'/g.exec(redirect_link);
+                var dl_link;
+                match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
                 console.log(match);
                 if (match) {
-                    download_file(match[1], section_name);
+                    dl_link = match[1];
                 } else {
-                    download_file(link.href, section_name);
+                    dl_link = link.href;
                 }
+                download_file({
+                    url: dl_link,
+                    section_name: section_name,
+                    course_name: course_name
+                });
             }
         );
         return false;
@@ -53,16 +56,20 @@ function download_section_factory(section, section_name) {
     return download_section;
 }
 
-function download_file(url, section_name) {
-    chrome.runtime.sendMessage({ type: "download", url: url, section_name: section_name }, function (response) { console.log("downloaded:" + url); });
+function download_file(dl_object) {
+chrome.runtime.sendMessage(Object.assign({
+    type: "download"
+}, dl_object), function (response) {
+    console.log("downloaded:" + url);
+});
 }
 
-function create_dl_button(section, section_name) {
+function create_dl_button(section, section_name, course_name) {
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
     const button_text = "הורד את כל קבצי הפרק";
-    const button_function = download_section_factory(section, section_name);
+    const button_function = download_section_factory(section, section_name, course_name);
     const desc_text = "Moodle Mass Downloader";
-    
+
 
     var download_button = document.createElement("li");
     download_button.setAttribute("class", "activity resource modtype_resource ");
