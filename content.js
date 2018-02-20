@@ -9,11 +9,17 @@ function create_buttons() {
         (section, index, section_list) => {
             try {
                 let section_name = getSectionName(index);
-                let download_videos_button = create_section_video_dl_button(section, section_name, course_name);
-                let download_file_button = create_section_files_dl_button(section, section_name, course_name);
+                let download_file_button = create_section_files_dl_button(section, section_name, course_name);//undefined if section is empty of files
+                let download_videos_button = create_section_video_dl_button(section, section_name, course_name);//undefined if section is empty of videos
 
-                section.insertBefore(download_file_button, section.firstChild);
+                if(download_file_button){
+                    section.insertBefore(download_file_button, section.firstChild); 
+                }
+
+                if(download_videos_button){
                 section.insertBefore(download_videos_button, section.firstChild);
+                }
+
                 if (index == 0) {
                     let course_download_button = create_course_dl_button(section_list, course_name);
                     section.insertBefore(course_download_button, section.firstChild);
@@ -58,6 +64,11 @@ function extract_url_from_anchor(anchor){
 
 function iterate_anchors_factory(anchor_list, section_name, course_name, callback)
 {
+    if (anchor_list.length == 0)
+    {
+        return undefined;
+    }
+
     return function iterate_section()
     {
         let download_record = {
@@ -82,7 +93,7 @@ function download_section_videos_factory(section,section_name,course_name)
 }
 
 function download_section_files_factory(section, section_name, course_name) {
-    let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
+    let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("resource"));
     return iterate_anchors_factory(file_anchors, section_name, course_name, download_file);
 }
 
@@ -113,6 +124,11 @@ function download_possible_video(dl_object) {
 }
 
 function create_dl_button(button_function, button_text) {
+    if(button_function === undefined)
+    {
+        return undefined;
+    }
+
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
     const desc_text = "Moodle Mass Downloader";
 
@@ -166,8 +182,7 @@ function create_course_dl_button(section_list, course_name) {
     return create_dl_button(button_function, button_text);
 }
 
-function create_section_video_dl_button(section,section_name,course_name)
-{
+function create_section_video_dl_button(section, section_name, course_name) {
     const button_text = "הורד את כל סרטי הפרק";
     const button_function = download_section_videos_factory(section, section_name, course_name);
     return create_dl_button(button_function,button_text);
