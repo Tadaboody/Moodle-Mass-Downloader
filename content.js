@@ -41,8 +41,7 @@ function validLink(link) {
 }
 
 function download_section_factory(section, section_name, course_name) {
-    function download_section(event) {
-        event.preventDefault(); // Makes the <a> not redirect
+    function download_section() {
         let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
         let possible_video_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("url"));
         let download_record = {
@@ -78,9 +77,9 @@ function download_section_factory(section, section_name, course_name) {
 }
 
 function download_section_list_factory(section_list, course_name) {
-    function download_section_list(event) {
+    function download_section_list() {
         Array.from(section_list).forEach(
-            (section, index) => download_section_factory(section, getSectionName(index), course_name)(event)
+            (section, index) => download_section_factory(section, getSectionName(index), course_name)()
         );
         return false;
     }
@@ -115,7 +114,10 @@ function create_dl_button(button_function, button_text) {
     download_button.innerHTML = button_html;
     var link = download_button.getElementsByTagName("a")[0];
     link.setAttribute("onclick", "");
-    link.onclick = button_function;
+    link.onclick = event => {
+        event.preventDefault(); //prevent redirect
+        button_function();
+    };
     link.href = ""; //Legal, makes page refresh on redirect
 
     var icon = download_button.getElementsByTagName("img")[0];
