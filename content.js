@@ -1,18 +1,19 @@
-chrome.runtime.sendMessage({ type: "startup" }, create_buttons);
+chrome.runtime.sendMessage({
+    type: "startup"
+}, create_buttons);
 
 function create_buttons() {
+    let course_name = getCourseName();
     Array.from(document.getElementsByClassName("section img-text")).forEach(
-        (ul, index) => {
+        (section, index, section_list) => {
             try {
-                var section_name = "";
-                if (index === 0) {//first section is intro/sylabus
-                    section_name = "פתיחה";
+                var section_name = getSectionName(index);
+                var download_button = create_section_dl_button(section, section_name, course_name);
+                section.insertBefore(download_button, section.firstChild);
+                if (index == 0) {
+                    let course_download_button = create_course_dl_button(section_list, course_name);
+                    section.insertBefore(course_download_button, section.firstChild);
                 }
-                else {
-                    section_name = document.getElementsByClassName("sectionname")[index - 1].textContent;
-                }
-                var download_button = create_dl_button(ul, section_name, getCourseName());
-                ul.insertBefore(download_button, ul.firstChild);
             } catch (error) {
                 console.error(error);
             }
@@ -21,8 +22,18 @@ function create_buttons() {
 }
 
 function getCourseName() {
-    let full_course_name = document.getElementsByTagName("h1")[0].textContent;//includes course number
-    return /(\D+)/g.exec(full_course_name)[1].trim();//TODO: add option to keep the course number
+    let full_course_name = document.getElementsByTagName("h1")[0].textContent; //includes course number
+    return /(\D+)/g.exec(full_course_name)[1].trim(); //TODO: add option to keep the course number
+}
+
+function getSectionName(section_index) {
+    var section_name = "";
+    if (section_index === 0) { //first section is intro/sylabus
+        section_name = "פתיחה";
+    } else {
+        section_name = document.getElementsByClassName("sectionname")[section_index - 1].textContent;
+    }
+    return section_name;
 }
 
 function validLink(link) {
@@ -34,7 +45,11 @@ function download_section_factory(section, section_name, course_name) {
         event.preventDefault(); // Makes the <a> not redirect
         let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
         let possible_video_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("url"));
-        let download_record = { url: "", section_name: section_name, course_name };
+        let download_record = {
+            url: "",
+            section_name: section_name,
+            course_name
+        };
         Array.from(file_anchors).forEach(
             anchor => {
                 var redirect_link = anchor.attributes.onclick.textContent;
@@ -55,18 +70,27 @@ function download_section_factory(section, section_name, course_name) {
     return download_section;
 }
 
-function download_file(dl_object) {
-chrome.runtime.sendMessage(Object.assign({
-    type: "download"
-}, dl_object), function (response) {
-    console.log("downloaded:" + url);
-});
+function download_section_list_factory(section_list, course_name) {
+    function download_section_list(event) {
+        Array.from(section_list).forEach(
+            (section, index) => download_section_factory(section, getSectionName(index), course_name)(event)
+        );
+        return false;
+    }
+    return download_section_list;
 }
 
-function create_dl_button(section, section_name, course_name) {
+
+function download_file(dl_object) {
+    chrome.runtime.sendMessage(Object.assign({
+        type: "download"
+    }, dl_object), function (response) {
+        console.log("downloaded:" + url);
+    });
+}
+
+function create_dl_button(button_function, button_text) {
     const button_icon = "https://mw5.haifa.ac.il/theme/image.php/boost/core/1517353424/f/archive-24";
-    const button_text = "הורד את כל קבצי הפרק";
-    const button_function = download_section_factory(section, section_name, course_name);
     const desc_text = "Moodle Mass Downloader";
 
 
@@ -77,7 +101,7 @@ function create_dl_button(section, section_name, course_name) {
     var link = download_button.getElementsByTagName("a")[0];
     link.setAttribute("onclick", "");
     link.onclick = button_function;
-    link.href = "";//Legal, makes page refresh on redirect
+    link.href = ""; //Legal, makes page refresh on redirect
 
     var icon = download_button.getElementsByTagName("img")[0];
     icon.src = button_icon; //todo: custom icon
@@ -90,12 +114,23 @@ function create_dl_button(section, section_name, course_name) {
     if (desc_list.length == 0) {
         desc = document.createElement("span");
         desc.setAttribute("class", "resourcelinkdetails");
-    }
-    else {
+    } else {
         desc = desc_list[0];
     }
     desc.textContent = desc_text;
     activity_instance.appendChild(desc);
 
     return download_button;
+}
+
+function create_section_dl_button(section, section_name, course_name) {
+    const button_function = download_section_factory(section, section_name, course_name);
+    const button_text = "הורד את כל קבצי הפרק";
+    return create_dl_button(button_function, button_text);
+}
+
+function create_course_dl_button(section_list, course_name) {
+    const button_function = download_section_list_factory(section_list, course_name);
+    const button_text = "הורד את כל קבצי הקורס";
+    return create_dl_button(button_function, button_text);
 }
