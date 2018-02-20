@@ -1,3 +1,4 @@
+//On Startup
 chrome.runtime.sendMessage({
     type: "startup"
 }, create_buttons);
@@ -49,25 +50,27 @@ function download_section_factory(section, section_name, course_name) {
             section_name: section_name,
             course_name
         };
+        function extract_url_from_anchor(anchor){
+            var redirect_link = anchor.attributes.onclick.textContent;
+            var dl_link;
+            match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
+            console.log(match);
+            if (match) {
+                return match[1];
+            } else {
+                return anchor.href;
+            }
+        }
         Array.from(file_anchors).forEach(
             anchor => {
-                var redirect_link = anchor.attributes.onclick.textContent;
-                var dl_link;
-                match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
-                console.log(match);
-                if (match) {
-                    dl_link = match[1];
-                } else {
-                    dl_link = anchor.href;
-                }
-                download_record.url = dl_link;
+                download_record.url = extract_url_from_anchor(anchor);
                 download_file(download_record);
             }
         );
 
         Array.from(possible_video_anchors).forEach(
             anchor => {
-                download_record.url = anchor.href;
+                download_record.url = extract_url_from_anchor(anchor);
                 download_possible_video(download_record);
             }
         );
