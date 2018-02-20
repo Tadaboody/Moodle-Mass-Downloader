@@ -1,4 +1,6 @@
 # Changelog
+## Unreleased
+- Added extra button for downloading entire course
 ## 0.12  [2017-2-19]
 - Added stalibility to directory creating
 - Overwrite existing files by default
