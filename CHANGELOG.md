@@ -1,5 +1,7 @@
 # Changelog
 ## Unreleased
+- Stop adding buttons to empty sections
+- Add naive video downloading (only works for a small set of vids)
 - Added extra button for downloading entire course
 ## 0.12  [2017-2-19]
 - Added stalibility to directory creating
