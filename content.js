@@ -8,9 +8,12 @@ function create_buttons() {
     Array.from(document.getElementsByClassName("section img-text")).forEach(
         (section, index, section_list) => {
             try {
-                var section_name = getSectionName(index);
-                var download_button = create_section_dl_button(section, section_name, course_name);
-                section.insertBefore(download_button, section.firstChild);
+                let section_name = getSectionName(index);
+                let download_videos_button = create_section_video_dl_button(section, section_name, course_name);
+                let download_file_button = create_section_files_dl_button(section, section_name, course_name);
+
+                section.insertBefore(download_file_button, section.firstChild);
+                section.insertBefore(download_videos_button, section.firstChild);
                 if (index == 0) {
                     let course_download_button = create_course_dl_button(section_list, course_name);
                     section.insertBefore(course_download_button, section.firstChild);
@@ -41,54 +44,57 @@ function validLink(link) {
     return link !== "" && link.contains("resource");
 }
 
-function download_section_factory(section, section_name, course_name) {
-    function download_section() {
-        let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
-        let possible_video_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("url"));
+function extract_url_from_anchor(anchor){
+    var redirect_link = anchor.attributes.onclick.textContent;
+    var dl_link;
+    match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
+    console.log(match);
+    if (match) {
+        return match[1];
+    } else {
+        return anchor.href;
+    }
+}
+
+function iterate_anchors_factory(anchor_list, section_name, course_name, callback)
+{
+    return function iterate_section()
+    {
         let download_record = {
             url: "",
             section_name: section_name,
             course_name
         };
-        function extract_url_from_anchor(anchor){
-            var redirect_link = anchor.attributes.onclick.textContent;
-            var dl_link;
-            match = /window.open\('(.+)'/g.exec(redirect_link); //in case the link opens a page it will have onclick=window.open(<LINK>)
-            console.log(match);
-            if (match) {
-                return match[1];
-            } else {
-                return anchor.href;
-            }
-        }
-        Array.from(file_anchors).forEach(
+        Array.from(anchor_list).forEach(
             anchor => {
                 download_record.url = extract_url_from_anchor(anchor);
-                download_file(download_record);
-            }
-        );
-
-        Array.from(possible_video_anchors).forEach(
-            anchor => {
-                download_record.url = extract_url_from_anchor(anchor);
-                download_possible_video(download_record);
+                callback(download_record);
             }
         );
         return false;//don't follow href
-    }
-    return download_section;
+    };
+}
+
+function download_section_videos_factory(section,section_name,course_name)
+{
+    let possible_video_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("url"));
+    return iterate_anchors_factory(possible_video_anchors, section_name, course_name, download_possible_video);
+}
+
+function download_section_files_factory(section, section_name, course_name) {
+    let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href !== "" && link.href.includes("resource"));
+    return iterate_anchors_factory(file_anchors, section_name, course_name, download_file);
 }
 
 function download_section_list_factory(section_list, course_name) {
     function download_section_list() {
         Array.from(section_list).forEach(
-            (section, index) => download_section_factory(section, getSectionName(index), course_name)()
+            (section, index) => download_section_files_factory(section, getSectionName(index), course_name)()
         );
         return false;
     }
     return download_section_list;
 }
-
 
 function download_file(dl_object) {
     chrome.runtime.sendMessage(Object.assign({
@@ -143,8 +149,13 @@ function create_dl_button(button_function, button_text) {
     return download_button;
 }
 
-function create_section_dl_button(section, section_name, course_name) {
-    const button_function = download_section_factory(section, section_name, course_name);
+function create_debug_button(button_function) {
+    const button_text = "DEBUG";
+    return create_dl_button(button_function, button_text);
+}
+
+function create_section_files_dl_button(section, section_name, course_name) {
+    const button_function = download_section_files_factory(section, section_name, course_name);
     const button_text = "הורד את כל קבצי הפרק";
     return create_dl_button(button_function, button_text);
 }
@@ -153,4 +164,11 @@ function create_course_dl_button(section_list, course_name) {
     const button_function = download_section_list_factory(section_list, course_name);
     const button_text = "הורד את כל קבצי הקורס";
     return create_dl_button(button_function, button_text);
+}
+
+function create_section_video_dl_button(section,section_name,course_name)
+{
+    const button_text = "הורד את כל סרטי הפרק";
+    const button_function = download_section_videos_factory(section, section_name, course_name);
+    return create_dl_button(button_function,button_text);
 }
