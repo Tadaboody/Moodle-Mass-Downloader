@@ -50,17 +50,32 @@ function download_section_factory(section, section_name, course_name) {
                 download_file(download_record);
             }
         );
-        return false;
+
+        Array.from(possible_video_anchors).forEach(
+            anchor => {
+                download_record.url = anchor.href;
+                download_possible_video(download_record);
+            }
+        );
+        return false;//don't follow href
     }
     return download_section;
 }
 
 function download_file(dl_object) {
-chrome.runtime.sendMessage(Object.assign({
-    type: "download"
-}, dl_object), function (response) {
-    console.log("downloaded:" + url);
-});
+    chrome.runtime.sendMessage(Object.assign({
+        type: "download"
+    }, dl_object), function (response) {
+        console.log("downloaded:" + url);
+    });
+}
+
+function download_possible_video(dl_object) {
+    chrome.runtime.sendMessage(Object.assign({
+        type: "video"
+    }, dl_object), function (response) {
+        console.log("downloaded:" + url);
+    });
 }
 
 function create_dl_button(section, section_name, course_name) {

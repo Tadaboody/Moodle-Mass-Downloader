@@ -9,14 +9,22 @@ chrome.runtime.onMessage.addListener(
                 register_dl_object(request);
                 chrome.downloads.download({
                     url: request.url,
-                    FilenameConflictAction: "overwrite"//TODO: add options
+                    conflictAction: chrome.downloads.FilenameConflictAction.overwrite//TODO: add options
                 },
                     function (id) {
                         sendResponse("Done!");
                     });
                 return true;
+            case "video":
+                register_dl_object(request);
+                try_downloading_video(request);
+                return true;
         }
     });
+
+function try_downloading_video(dl_object) {
+
+}
 
 function register_dl_object(dl_object) {
     link_records[dl_object.url] = dl_object;

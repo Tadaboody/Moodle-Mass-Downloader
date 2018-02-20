@@ -21,6 +21,7 @@
         "persistent": false
     },
     "permissions": [
+        "*://*.ac.il/*/cs/*",
         "downloads"
     ]
 }
