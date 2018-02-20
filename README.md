@@ -25,7 +25,7 @@ This extention was writtern and tested for [Haifa University's 2018 moodle](http
 If you happen to use a version that doesn't seem to be supported or have any bugs/features to report please open an issue or contact me at tomerpet@gmail.com while including the project name in the subject.  
 ## Authors
 
-* **Tomer Keren** - [email](tomerpet@gmail.com), [github](https://www.github.com/Tadaboody)
+* **Tomer Keren** - [email](tomer.keren.dev@gmail.com), [github](https://www.github.com/Tadaboody)
 
 See also the list of [contributors](https://github.com/Tadaboody/Moodle-Mass-Downloader/contributors) who participated in this project.
 
