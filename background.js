@@ -1,44 +1,56 @@
 var link_records = {};
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+    function (request, sender, callback) {
         switch (request.type) {
             case "startup":
                 chrome.pageAction.show(sender.tab.id);
                 break;
             case "download":
-                download_file(request);
+                download_file(request, callback);
                 return true;
             case "video":
-                try_downloading_video(request);
+                try_downloading_video(request, callback);
                 return true;
         }
     });
-function download_file(dl_object) {
+function download_file(dl_object, callback) {
     register_dl_object(dl_object);
     chrome.downloads.download({
         url: dl_object.url,
         conflictAction: chrome.downloads.FilenameConflictAction.overwrite//TODO: add options
     },
         function (id) {
-            sendResponse("Done!");
+            callback(dl_object.url);
         });
 }
 
-function try_downloading_video(dl_object) {
+function try_downloading_video(dl_object, callback) {
     //A videos link is a redirect to the page containing the video. we make a request to redirect to the video page and then download the url.mp4
-    var xhr = new XMLHttpRequest(); //for redirect
-    xhr.onloadend = () => {
-        console.log(xhr.readyState);
-        switch (xhr.status) {
-            case 200:
-                dl_object.url = xhr.responseURL.substr(0, xhr.responseURL.lastIndexOf(".")) + ".mp4";//should work for most cases
-                download_file(dl_object);
-                break;
+    var initial_request = new XMLHttpRequest(); //for redirect
+    var base_url;
+    initial_request.onloadend = () => {
+        if (initial_request.status === 200) {
+            base_url = initial_request.responseURL.substr(0, initial_request.responseURL.lastIndexOf('/') + 1);
+            let doc = initial_request.responseText;
+            let match = /<iframe.*src="([^"]+)".*>/g.exec(doc);
+            let media_src = match[1];
+            let media_request = new XMLHttpRequest();
+            media_request.open("GET", base_url + media_src);
+            media_request.onloadend = () => {
+                if (media_request.status === 200) {
+                    let match = /MediaSrc\("([^"]+)"\);/.exec(media_request.responseText);
+                    if (match) {
+                        dl_object.url = base_url + match[1];
+                        download_file(dl_object, callback);
+                    }
+                }
+            };
+            media_request.send();
         }
-    }; 
-    xhr.open("GET", dl_object.url, true);
-    xhr.response_type = "document";
-    xhr.send();
+    };
+    initial_request.open("GET", dl_object.url); 
+    initial_request.response_type = "document";
+    initial_request.send();
 }
 
 function register_dl_object(dl_object) {
