@@ -111,7 +111,7 @@ function download_file(dl_object) {
     chrome.runtime.sendMessage(Object.assign({
         type: "download"
     }, dl_object), function (response) {
-        console.log("downloaded:" + url);
+        console.log("downloaded:" + response);
     });
 }
 
@@ -119,7 +119,7 @@ function download_possible_video(dl_object) {
     chrome.runtime.sendMessage(Object.assign({
         type: "video"
     }, dl_object), function (response) {
-        console.log("downloaded:" + url);
+        console.log("downloaded:" + response);
     });
 }
 
@@ -184,6 +184,8 @@ function create_course_dl_button(section_list, course_name) {
 
 function create_section_video_dl_button(section, section_name, course_name) {
     const button_text = "הורד את כל סרטי הפרק";
+    //Flattening the array means we can't know the section name for each one unless we have an object. Idea rejected!
+    //const all_sections = [].concat(...section_list); //section_list.flatten() https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
     const button_function = download_section_videos_factory(section, section_name, course_name);
     return create_dl_button(button_function,button_text);
 }
