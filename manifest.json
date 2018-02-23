@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Moodle Mass Downloader",
     "description": "Mass Download a moodle courses files",
-    "version": "0.12",
+    "version": "1.00",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
