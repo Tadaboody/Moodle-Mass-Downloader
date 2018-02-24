@@ -1,4 +1,6 @@
 # Changelog
+## 1.01 [2018-2-24]
+- Fix video download on direct link to .mp4
 ## 1.00 [2018-2-23]
 - Stop adding buttons to empty sections
 - Add naive video downloading 
