@@ -24,12 +24,24 @@ function download_file(dl_object, callback) {
         });
 }
 
-function try_downloading_video(dl_object, callback) {
+function try_downloading_video(dl_object, responseCallback) {
     //A videos link is a redirect to the page containing the video. we make a request to redirect to the video page and then download the url.mp4
     var initial_request = new XMLHttpRequest(); //for redirect
     var base_url;
+    initial_request.onprogress= () => {
+        if(initial_request.responseURL.includes(".mp4"))
+        {//Some links are directly to the mp4 file
+            dl_object.url = initial_request.responseURL;
+            download_file(dl_object,responseCallback);
+            initial_request.onloadend = () => {}; //Don't do onloadend
+        }
+            initial_request.onprogress = () => {}; //Only run onprogress once
+    };
+
     initial_request.onloadend = () => {
+        console.log("Load end");
         if (initial_request.status === 200) {
+            console.log("AAAAA");
             base_url = initial_request.responseURL.substr(0, initial_request.responseURL.lastIndexOf('/') + 1);
             let doc = initial_request.responseText;
             let match = /<iframe.*src="([^"]+)".*>/g.exec(doc);
@@ -41,7 +53,7 @@ function try_downloading_video(dl_object, callback) {
                     let match = /MediaSrc\("([^"]+)"\);/.exec(media_request.responseText);
                     if (match) {
                         dl_object.url = base_url + match[1];
-                        download_file(dl_object, callback);
+                        download_file(dl_object, responseCallback);
                     }
                 }
             };
