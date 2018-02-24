@@ -22,7 +22,7 @@ Clicking it will download all of the section it's in into a nice folder
 
 ## Contributing
 This extention was writtern and tested for [Haifa University's 2018 moodle](https://mw5.haifa.ac.il/) and its predecessors but tries to support other versions as well.  
-If you happen to use a version that doesn't seem to be supported or have any bugs/features to report please open an issue or contact me at tomerpet@gmail.com while including the project name in the subject.  
+If you happen to use a version that doesn't seem to be supported or have any bugs/features to report please open an issue. 
 ## Authors
 
 * **Tomer Keren** - [email](tomer.keren.dev@gmail.com), [github](https://www.github.com/Tadaboody)
