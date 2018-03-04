@@ -1,6 +1,7 @@
 # Mass Moodle Downlaoder
 
-A simple extention to help you mass download sections of moodle courses... _just in case_.
+A simple extention to help you mass download sections of moodle courses... _just in case_.  
+Download the current build on the [chrome store]( https://chrome.google.com/webstore/detail/moodle-mass-downloader/cibfhhncgchiihdnemimipceamplooeo)
 
 ## Getting Started
 clone the project using
