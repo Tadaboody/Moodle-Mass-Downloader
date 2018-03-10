@@ -1,4 +1,8 @@
 # Changelog
+## 1.02 [2018-3-10]
+- Fix #9,#10 by changing file names [`#9`](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/9) [#10](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/10)
+
+- Fix course-wide downloading with empty sections [8721f65](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/8721f65b9b9a3a3fa606913fb84c70e987dfd4f9)
 ## 1.01 [2018-2-24]
 - Fix video download on direct link to .mp4
 ## 1.00 [2018-2-23]

@@ -3,6 +3,8 @@
 A simple extention to help you mass download sections of moodle courses... _just in case_.  
 Download the current build on the [chrome store]( https://chrome.google.com/webstore/detail/moodle-mass-downloader/cibfhhncgchiihdnemimipceamplooeo)
 
+## Changelog
+Full list of changes can be seen [here](https://github.com/Tadaboody/Moodle-Mass-Downloader/blob/master/CHANGELOG.md)
 ## Getting Started
 clone the project using
 
