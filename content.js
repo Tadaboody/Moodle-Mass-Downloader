@@ -104,15 +104,22 @@ function download_section_videos_factory(section,section_name,course_name)
 
 function download_section_files_factory(section, section_name, course_name) {
     let file_anchors = Array.from(section.getElementsByTagName("a")).filter(link => link.href.includes("resource"));
-    if(file_anchors.length == 0)
-        return function(){}; // do nothing
     return iterate_anchors_factory(file_anchors, section_name, course_name, download_file);
 }
 
 function download_section_list_factory(section_list, course_name) {
     function download_section_list() {
         Array.from(section_list).forEach(
-            (section, index) => download_section_files_factory(section, getSectionName(index), course_name)()
+            (section, index) => {
+                let callback = download_section_files_factory(section, getSectionName(index), course_name);
+                if(callback)
+                {
+                    return callback();
+                }
+                else{
+                    return function(){};
+                }
+            }
         );
         return false;
     }
