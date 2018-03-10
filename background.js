@@ -71,15 +71,19 @@ function register_dl_object(dl_object) {
 
 chrome.downloads.onDeterminingFilename.addListener(suggest_file_name);
 
-function suggest_file_name(download_item, suggest) {
-    link_record = link_records[download_item.url];
-    download_item.filename = pathJoin("הורדות מודל", link_record.course_name, link_record.section_name, download_item.filename);
-    download_item.conflictAction = 'overwrite';
-    console.log("suggested name=" + download_item.filename);
-    suggest(download_item);
+function suggest_file_name(download_suggestion, suggest) {
+    let link_record = link_records[download_suggestion.url];
+    let file_ext = download_suggestion.filename.split('.').pop();
+    let file_name = link_record.index.toString() + ' ' + link_record.displayed_name + '.' + file_ext;
+    let file_path = pathJoin("הורדות מודל", link_record.course_name, link_record.section_name, file_name);
+    download_suggestion.filename = file_path;
+    download_suggestion.conflictAction = 'overwrite';
+    console.log("suggested name=" + download_suggestion.filename);
+    suggest(download_suggestion);
 }
 
 function pathJoin(...args) {
     console.log("args = " + args);
-    return args.reduce((a, b) => a + '\\' + b); //TODO: linux support (\\\\ makes "file path too long")
+    let replace_slash_with_dash = string => string.replace(/\//g,'-');
+    return args.reduce((a, b) => replace_slash_with_dash(a) + '\\' + replace_slash_with_dash(b)); //TODO: linux support (\\\\ makes "file path too long")
 }

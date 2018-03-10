@@ -71,13 +71,23 @@ function iterate_anchors_factory(anchor_list, section_name, course_name, callbac
 
     return function iterate_section()
     {
+        //TODO:add as settings
         let download_record = {
             url: "",
             section_name: section_name,
-            course_name
+            course_name: course_name,
+            index: undefined,
+            displayed_name: undefined
         };
         Array.from(anchor_list).forEach(
-            anchor => {
+            (anchor,index) => {
+                download_record.index = index.toString();//(issue #9)
+                if(index < 10)
+                {
+                    download_record.index = '0' + index.toString(); // leading 0s
+                }
+                let instancename = anchor.getElementsByClassName("instancename")[0];//File names as displayed on moodle (issue #10)
+                download_record.displayed_name = instancename.childNodes[0].nodeValue; // Extract only the text of instancename and not its children
                 download_record.url = extract_url_from_anchor(anchor);
                 callback(download_record);
             }
