@@ -1,4 +1,6 @@
 # Changelog
+## 1.03 [2018-3-21]
+- Fix button appearing in empty sections [4352bdb](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/4352bdbd85491065038219734571705dcb7eedca)
 ## 1.02 [2018-3-10]
 - Fix #9,#10 by changing file names [`#9`](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/9) [#10](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/10)
 
