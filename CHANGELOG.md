@@ -1,4 +1,6 @@
 # Changelog
+## 1.04 [2018-4-23]
+- Fix indexing by using link id as a hash [91abbc9](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/91abbc97a2bd1b6241e6401994fcdc98988f3e08)
 ## 1.03 [2018-3-21]
 - Fix button appearing in empty sections [4352bdb](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/4352bdbd85491065038219734571705dcb7eedca)
 ## 1.02 [2018-3-10]
