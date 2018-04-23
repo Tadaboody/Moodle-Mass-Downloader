@@ -66,13 +66,16 @@ function try_downloading_video(dl_object, responseCallback) {
 }
 
 function register_dl_object(dl_object) {
-    link_records[dl_object.url] = dl_object;
+    link_records[extractId(dl_object.url)] = dl_object;
 }
-
+function get_dl_object(url)
+{
+    return link_records[extractId(url)];
+}
 chrome.downloads.onDeterminingFilename.addListener(suggest_file_name);
 
 function suggest_file_name(download_suggestion, suggest) {
-    let link_record = link_records[download_suggestion.url];
+    let link_record = get_dl_object(download_suggestion.url);
     let file_ext = download_suggestion.filename.split('.').pop();
     let file_name = link_record.index.toString() + ' ' + link_record.displayed_name + '.' + file_ext;
     let file_path = pathJoin("הורדות מודל", link_record.course_name, link_record.section_name, file_name);
@@ -86,4 +89,9 @@ function pathJoin(...args) {
     console.log("args = " + args);
     let replace_slash_with_dash = string => string.replace(/\//g,'-');
     return args.reduce((a, b) => replace_slash_with_dash(a) + '\\' + replace_slash_with_dash(b)); //TODO: linux support (\\\\ makes "file path too long")
+}
+
+function extractId(url){
+    match = /id=(\d+)/g.exec(url);
+    return match[1];
 }
