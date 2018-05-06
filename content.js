@@ -32,8 +32,13 @@ function create_buttons() {
 }
 
 function getCourseName() {
-    let full_course_name = document.getElementsByTagName("h1")[0].textContent; //includes course number
-    return /(\D+)/g.exec(full_course_name)[1].trim(); //TODO: add option to keep the course number
+    try {
+        let full_course_name = document.getElementsByTagName("h1")[0].textContent; //includes course number
+        return /(\D+)/g.exec(full_course_name)[1].trim(); //TODO: add option to keep the course number
+    } catch (error) {
+        console.error(error);
+        return "unknown";
+    }
 }
 
 function getSectionName(section_index) {
@@ -81,6 +86,7 @@ function iterate_anchors_factory(anchor_list, section_name, course_name, callbac
         };
         Array.from(anchor_list).forEach(
             (anchor,index) => {
+                index = index+1;
                 download_record.index = index.toString();//(issue #9)
                 if(index < 10)
                 {

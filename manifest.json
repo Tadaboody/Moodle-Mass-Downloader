@@ -12,7 +12,7 @@
         "default_icon": "icons/icon24.png"
     },
     "content_scripts": [{
-        "matches": ["*://*.ac.il/course/*"],
+        "matches": ["*://*.ac.il/*/course/*"],
         "js": ["content.js"],   
         "run_at": "document_end"
     }],

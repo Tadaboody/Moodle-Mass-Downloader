@@ -93,5 +93,11 @@ function pathJoin(...args) {
 
 function extractId(url){
     match = /id=(\d+)/g.exec(url);
-    return match[1];
+    if(match)
+    {
+        return match[1];
+    }else
+    {
+        return url;
+    }
 }
