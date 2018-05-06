@@ -1,11 +1,13 @@
 # Changelog
+## 1.05 [2018-5-6]
+- Support more sites including those without easily found course name [f5dfbcd](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/f5dfbcd4fb6eab714b819afb65fbea9636a40636)
+- Fix indexing on id-less links (videos mostly) [f5dfbcd](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/f5dfbcd4fb6eab714b819afb65fbea9636a40636)
 ## 1.04 [2018-4-23]
 - Fix indexing by using link id as a hash [91abbc9](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/91abbc97a2bd1b6241e6401994fcdc98988f3e08)
 ## 1.03 [2018-3-21]
 - Fix button appearing in empty sections [4352bdb](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/4352bdbd85491065038219734571705dcb7eedca)
 ## 1.02 [2018-3-10]
 - Fix #9,#10 by changing file names [`#9`](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/9) [#10](https://github.com/Tadaboody/Moodle-Mass-Downloader/issues/10)
-
 - Fix course-wide downloading with empty sections [8721f65](https://github.com/Tadaboody/Moodle-Mass-Downloader/commit/8721f65b9b9a3a3fa606913fb84c70e987dfd4f9)
 ## 1.01 [2018-2-24]
 - Fix video download on direct link to .mp4
