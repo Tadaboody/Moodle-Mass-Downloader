@@ -1,5 +1,5 @@
 //On Startup
-chrome.runtime.sendMessage({
+chrome.runtime.sendMessage({ //Wake up the background script
     type: "startup"
 }, create_buttons);
 
@@ -48,7 +48,7 @@ function getSectionName(section_index) {
     } else {
         section_name = document.getElementsByClassName("sectionname")[section_index - 1].textContent;
     }
-    return section_name;
+    return '0' + (section_index + 1).toString() + ' ' + section_name;
 }
 
 function validLink(link) {
