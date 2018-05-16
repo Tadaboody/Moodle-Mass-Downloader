@@ -3,7 +3,7 @@
     "name": "Moodle Mass Downloader",
     "short_name": "Moodle Downloader",
     "description": "Mass Download a moodle courses files",
-    "version": "1.06",
+    "version": "1.07",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
@@ -22,7 +22,7 @@
         "persistent": false
     },
     "permissions": [
-        "*://*.ac.il/*/cs/*",
+        "*://*.ac.il/*cs/*",
         "downloads"
     ]
 }
