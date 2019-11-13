@@ -52,7 +52,8 @@ function try_downloading_video(dl_object, responseCallback) {
                 if (media_request.status === 200) {
                     let match = /MediaSrc\("([^"]+)"\);/.exec(media_request.responseText);
                     if (match) {
-                        dl_object.url = base_url + match[1];
+                        let resource_dir = media_request.responseURL.substr(0, media_request.responseURL.lastIndexOf('/') + 1);
+                        dl_object.url = resource_dir + match[1];
                         download_file(dl_object, responseCallback);
                     }
                 }
